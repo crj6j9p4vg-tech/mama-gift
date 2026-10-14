@@ -3,231 +3,582 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Мамочке с любовью — от дочки и сына</title>
+<title>Мамочке с любовью</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --pink:#f7d9e3;--pink-deep:#e8b6c8;--lavender:#d9c9e6;--lavender-deep:#b8a3d1;
-    --cream:#fdf8f2;--gold:#c9a86a;--gold-soft:#e3cb95;--ink:#5b4a55;--ink-soft:#8a7a85;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;}
-  body{font-family:'Montserrat',sans-serif;color:var(--ink);background:var(--cream);overflow-x:hidden;line-height:1.7;-webkit-font-smoothing:antialiased;}
-  .app{position:relative;min-height:100vh;display:flex;flex-direction:column;}
-  .page{position:fixed;inset:0;padding:90px 24px 130px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;visibility:hidden;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease,visibility .8s;overflow-y:auto;z-index:1;}
-  .page.active{opacity:1;visibility:visible;transform:translateY(0);z-index:2;}
-  .content{max-width:680px;width:100%;background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:24px;padding:36px 28px;box-shadow:0 20px 60px rgba(184,163,209,.18);text-align:center;animation:fadeUp 1s ease both;}
-  .content.no-card{background:transparent;backdrop-filter:none;box-shadow:none;padding:0;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-  h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.8rem,5vw,2.8rem);color:var(--ink);line-height:1.2;margin-bottom:14px;letter-spacing:.5px;}
-  h1 .accent{color:var(--gold);font-style:italic;}
-  .subtitle{font-size:.95rem;color:var(--ink-soft);font-style:italic;margin-bottom:22px;letter-spacing:.3px;}
-  p.text{font-size:clamp(.95rem,2.4vw,1.05rem);color:var(--ink);margin-bottom:18px;font-weight:300;}
-  .bg{position:fixed;inset:0;z-index:0;transition:background 1.2s ease;}
-  .bg-1{background:radial-gradient(circle at 20% 20%,#fbe3ec 0%,transparent 55%),radial-gradient(circle at 80% 30%,#e5d6f0 0%,transparent 50%),radial-gradient(circle at 50% 90%,#f7dce8 0%,transparent 60%),#fdf8f2;}
-  .bg-2{background:radial-gradient(circle at 70% 30%,#f8d9c9 0%,transparent 55%),radial-gradient(circle at 20% 80%,#f3d5e0 0%,transparent 50%),#fdf4ee;}
-  .bg-3{background:radial-gradient(circle at 30% 30%,#fce9d8 0%,transparent 55%),radial-gradient(circle at 80% 70%,#f7dde6 0%,transparent 50%),#fdf9f3;}
-  .bg-4{background:radial-gradient(circle at 25% 25%,#e8ddf3 0%,transparent 55%),radial-gradient(circle at 75% 75%,#d6e5dc 0%,transparent 50%),#f9f6ef;}
-  .bg-5{background:radial-gradient(circle at 50% 40%,#fbe0e6 0%,transparent 60%),radial-gradient(circle at 20% 90%,#f5e4d0 0%,transparent 55%),#fdf6ef;}
-  .bg-6{background:radial-gradient(circle at 15% 30%,#f2d9e5 0%,transparent 55%),radial-gradient(circle at 85% 70%,#e9dcf1 0%,transparent 50%),#fdf8f4;}
-  .bg-7{background:linear-gradient(135deg,#fdf8f2 0%,#f9edd8 50%,#fdf8f2 100%);}
-  .bg-8{background:radial-gradient(circle at 50% 30%,#fbd5e0 0%,transparent 55%),radial-gradient(circle at 30% 80%,#d8c3e8 0%,transparent 55%),#fdf4f2;}
-  .bg-9{background:radial-gradient(circle at 40% 20%,#fae4d2 0%,transparent 55%),radial-gradient(circle at 70% 85%,#f3dbe6 0%,transparent 50%),#fdf9f2;}
-  .bg-10{background:radial-gradient(circle at 30% 20%,#dcecfb 0%,transparent 55%),radial-gradient(circle at 80% 80%,#fae2ea 0%,transparent 50%),#fdfaf5;}
-  .bg-11{background:radial-gradient(circle at 50% 20%,#fad9e3 0%,transparent 55%),radial-gradient(circle at 30% 85%,#f1dcc0 0%,transparent 55%),#fdf7f0;}
-  .bg-12{background:radial-gradient(circle at 25% 25%,#e6daf2 0%,transparent 55%),radial-gradient(circle at 80% 70%,#fbe4d8 0%,transparent 50%),#fdf8f3;}
-  .bg-13{background:radial-gradient(circle at 50% 30%,#fcecdc 0%,transparent 55%),radial-gradient(circle at 20% 85%,#eadcf0 0%,transparent 55%),#fdf9f4;}
-  .bg-14{background:radial-gradient(circle at 50% 20%,#f7ddc3 0%,transparent 55%),radial-gradient(circle at 30% 90%,#f1d6e2 0%,transparent 50%),#fdf6ee;}
-  .bg-15{background:radial-gradient(circle at 20% 20%,#fbd4e0 0%,transparent 50%),radial-gradient(circle at 80% 30%,#d9c5ee 0%,transparent 50%),radial-gradient(circle at 50% 90%,#fbe7c8 0%,transparent 55%),#fdf6f3;}
-  .petals{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
-  .petal{position:absolute;top:-40px;font-size:18px;opacity:.7;animation:fall linear infinite;}
-  @keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:0;}10%{opacity:.8;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
-  .top-bar{position:fixed;top:0;left:0;right:0;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;z-index:10;background:linear-gradient(180deg,rgba(253,248,242,.9) 0%,rgba(253,248,242,0) 100%);pointer-events:none;}
-  .top-bar .hint{font-size:.75rem;color:var(--ink-soft);letter-spacing:.5px;pointer-events:auto;}
-  .bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:16px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:10;background:linear-gradient(0deg,rgba(253,248,242,.95) 0%,rgba(253,248,242,0) 100%);}
-  .progress{display:flex;align-items:center;gap:12px;font-size:.8rem;color:var(--ink-soft);letter-spacing:1px;}
-  .progress-bar{width:120px;height:4px;background:rgba(184,163,209,.25);border-radius:4px;overflow:hidden;}
-  .progress-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--pink-deep),var(--lavender-deep),var(--gold-soft));border-radius:4px;transition:width .5s ease;}
-  .nav{display:flex;gap:12px;}
-  .nav button{font-family:'Montserrat',sans-serif;font-size:.85rem;padding:10px 22px;border-radius:30px;border:1.5px solid var(--gold-soft);background:rgba(255,255,255,.75);color:var(--ink);cursor:pointer;transition:all .3s ease;letter-spacing:.5px;backdrop-filter:blur(6px);}
-  .nav button:hover:not(:disabled){background:var(--gold-soft);color:#fff;transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,168,106,.3);}
-  .nav button:disabled{opacity:.35;cursor:default;}
-  .btn{font-family:'Montserrat',sans-serif;font-size:.95rem;padding:14px 32px;border-radius:40px;border:none;background:linear-gradient(135deg,var(--pink-deep),var(--lavender-deep));color:#fff;cursor:pointer;transition:all .35s ease;letter-spacing:.5px;margin-top:8px;box-shadow:0 10px 25px rgba(184,163,209,.35);}
-  .btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 15px 35px rgba(184,163,209,.5);}
-  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--gold-soft);box-shadow:none;}
-  .btn.ghost:hover{background:rgba(227,203,149,.2);}
-  .popup{margin-top:20px;padding:20px;background:rgba(255,255,255,.85);border-left:3px solid var(--gold);border-radius:14px;font-style:italic;color:var(--ink);font-size:.95rem;animation:fadeUp .6s ease both;box-shadow:0 10px 30px rgba(184,163,209,.15);}
-  .pulse-heart{display:inline-block;font-size:1.6rem;animation:pulse 1.4s ease-in-out infinite;vertical-align:middle;margin-left:6px;}
-  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
-  .slider-wrap{margin-top:22px;}
-  input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,#f9d9b6,#e8b6c8,#b8a3d1);outline:none;}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--gold);cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.15);}
-  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
-  @media(max-width:480px){.cards{grid-template-columns:1fr;}}
-  .card{padding:16px;border-radius:16px;background:rgba(255,255,255,.8);border:1px solid rgba(201,168,106,.3);cursor:pointer;transition:all .35s ease;font-size:.9rem;text-align:left;}
-  .card:hover{transform:translateY(-4px);box-shadow:0 12px 25px rgba(184,163,209,.2);background:rgba(255,255,255,.95);}
-  .card .icon{font-size:1.4rem;display:block;margin-bottom:6px;}
-  .card .title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--ink);}
-  .card .body{display:none;margin-top:8px;font-size:.85rem;color:var(--ink-soft);font-style:italic;animation:fadeUp .5s ease;}
-  .card.open .body{display:block;}
-  .carousel{position:relative;margin-top:20px;overflow:hidden;border-radius:18px;background:rgba(255,255,255,.7);min-height:140px;}
-  .slide{padding:30px 50px;text-align:center;font-style:italic;font-size:1rem;color:var(--ink);display:none;animation:fadeUp .6s ease both;}
-  .slide.active{display:block;}
-  .car-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:14px;}
-  .car-nav button{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold-soft);background:rgba(255,255,255,.8);color:var(--gold);font-size:1.1rem;cursor:pointer;transition:all .3s;}
-  .car-nav button:hover{background:var(--gold-soft);color:#fff;}
-  .dots{display:flex;justify-content:center;gap:8px;margin-top:14px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:rgba(184,163,209,.35);cursor:pointer;transition:all .3s;}
-  .dot.active{background:var(--gold);transform:scale(1.3);}
-  .heart-game{position:relative;height:220px;margin-top:20px;background:rgba(255,255,255,.4);border-radius:18px;overflow:hidden;}
-  .petal-piece{position:absolute;font-size:24px;cursor:pointer;user-select:none;transition:all .4s ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,.1));}
-  .petal-piece.picked{opacity:0;pointer-events:none;transform:scale(0);}
-  .clouds{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;margin-top:20px;}
-  .cloud{padding:16px 10px;border-radius:50px;background:rgba(255,255,255,.85);border:1px solid rgba(201,168,106,.3);cursor:pointer;font-size:.85rem;transition:all .35s ease;min-height:70px;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 6px 14px rgba(184,163,209,.15);color:var(--ink-soft);}
-  .cloud:hover{transform:translateY(-3px);}
-  .cloud.revealed{background:linear-gradient(135deg,#fbe4ec,#e6dcf3);color:var(--ink);font-style:italic;font-size:.8rem;box-shadow:0 10px 22px rgba(184,163,209,.28);}
-  .medal{width:140px;height:140px;margin:20px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f6e2b8,#c9a86a);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-size:.9rem;text-align:center;padding:14px;box-shadow:0 15px 35px rgba(201,168,106,.45);animation:medalPop .8s cubic-bezier(.34,1.56,.64,1) both;line-height:1.2;}
-  @keyframes medalPop{0%{transform:scale(0) rotate(-180deg);opacity:0;}100%{transform:scale(1) rotate(0);opacity:1;}}
-  .checklist{text-align:left;margin-top:20px;}
-  .check-item{display:flex;align-items:flex-start;gap:10px;padding:12px 0;cursor:pointer;border-bottom:1px solid rgba(201,168,106,.2);font-size:.95rem;transition:opacity .3s;}
-  .check-item .box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;transition:all .3s;margin-top:2px;}
-  .check-item.checked .box{background:var(--gold);}
-  .check-item.checked span.label{text-decoration:line-through;opacity:.5;}
-  .signature{margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.6rem;color:var(--gold);animation:fadeUp .8s ease both;}
-  .seal{width:110px;height:110px;margin:24px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d98a9a,#a13a52);display:flex;align-items:center;justify-content:center;color:#fdf0e0;font-family:'Cormorant Garamond',serif;font-size:1.1rem;text-align:center;box-shadow:0 10px 25px rgba(161,58,82,.45);animation:sealStamp .8s cubic-bezier(.34,1.56,.64,1) both;padding:10px;line-height:1.2;}
-  @keyframes sealStamp{0%{transform:scale(2) rotate(-20deg);opacity:0;}60%{transform:scale(.9) rotate(3deg);opacity:1;}100%{transform:scale(1) rotate(0);opacity:1;}}
-  .envelope{font-size:5rem;margin:10px 0;cursor:pointer;transition:all .6s ease;display:inline-block;}
-  .envelope.open{transform:translateY(-8px) scale(1.15);}
-  .confetti{position:fixed;top:-20px;font-size:22px;pointer-events:none;z-index:100;animation:confettiFall linear forwards;}
-  @keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
-  .deco-frame{margin:18px auto;padding:22px;max-width:320px;border:1.5px solid rgba(201,168,106,.4);border-radius:18px;background:rgba(255,255,255,.45);position:relative;}
-  .deco-frame::before,.deco-frame::after{content:"🌸";position:absolute;font-size:1.2rem;opacity:.7;}
-  .deco-frame::before{top:6px;left:10px;}
-  .deco-frame::after{bottom:6px;right:10px;}
-  .deco-frame p{font-style:italic;font-size:.9rem;color:var(--ink-soft);}
-  .input-field{width:100%;padding:12px 16px;border-radius:14px;border:1px solid rgba(201,168,106,.4);background:rgba(255,255,255,.8);font-family:'Montserrat',sans-serif;font-size:.9rem;color:var(--ink);margin-top:14px;resize:vertical;outline:none;transition:border .3s;}
-  .input-field:focus{border-color:var(--gold);}
-  .like-heart{font-size:2rem;cursor:pointer;transition:transform .3s;display:inline-block;margin-top:16px;user-select:none;}
-  .like-heart:hover{transform:scale(1.2);}
-  .like-heart.liked{animation:heartBeat .6s ease;}
-  @keyframes heartBeat{0%,100%{transform:scale(1);}30%{transform:scale(1.4);}60%{transform:scale(.9);}}
-  .like-count{font-size:.8rem;color:var(--ink-soft);display:block;margin-top:4px;}
-  .fade-seq{opacity:0;transform:translateY(14px);transition:opacity .9s ease,transform .9s ease;}
-  .fade-seq.visible{opacity:1;transform:translateY(0);}
-  .counter-box{display:inline-block;padding:20px 30px;background:rgba(255,255,255,.7);border-radius:18px;margin-top:20px;box-shadow:0 10px 25px rgba(184,163,209,.15);}
-  .counter-box .label{font-size:.8rem;color:var(--ink-soft);letter-spacing:1px;}
-  .counter-box .num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;color:var(--gold);display:block;line-height:1.1;margin:6px 0;}
-  .counter-box .unit{font-size:.85rem;color:var(--ink-soft);}
-  .quote-box{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3.5vw,2rem);font-style:italic;color:var(--ink);text-align:center;line-height:1.5;max-width:100%;}
-  .typing{overflow:hidden;white-space:nowrap;border-right:2px solid var(--gold);animation:typing 4s steps(80,end) forwards, blink .8s step-end infinite;margin:0 auto;display:inline-block;}
-  @keyframes typing{from{width:0;}to{width:100%;}}
-  @keyframes blink{50%{border-color:transparent;}}
-  @media(max-width:600px){
-    .page{padding:80px 14px 140px;}
-    .content{padding:26px 18px;border-radius:20px;}
-    .nav button{padding:9px 16px;font-size:.8rem;}
-    .btn{padding:12px 24px;font-size:.9rem;}
-    .medal{width:110px;height:110px;font-size:.8rem;}
-    .envelope{font-size:3.5rem;}
-    .typing{white-space:normal;animation:fadeUp 2s ease both;border:none;}
-  }
+:root{--pink:#f7d9e3;--pink-deep:#e8b6c8;--lavender:#d9c9e6;--lavender-deep:#b8a3d1;--cream:#fdf8f2;--gold:#c9a86a;--gold-soft:#e3cb95;--ink:#5b4a55;--ink-soft:#8a7a85;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'Montserrat',sans-serif;color:var(--ink);background:var(--cream);overflow-x:hidden;line-height:1.7;-webkit-font-smoothing:antialiased;}
+.app{position:relative;min-height:100vh;}
+.page{position:fixed;inset:0;padding:80px 20px 120px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;visibility:hidden;transform:translateY(20px);transition:opacity .8s ease,transform .8s ease,visibility .8s;overflow-y:auto;z-index:1;}
+.page.active{opacity:1;visibility:visible;transform:translateY(0);z-index:2;}
+.content{max-width:680px;width:100%;background:rgba(255,255,255,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:24px;padding:34px 26px;box-shadow:0 20px 60px rgba(184,163,209,.18);text-align:center;animation:fadeUp 1s ease both;}
+.content.no-card{background:transparent;backdrop-filter:none;box-shadow:none;padding:0;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.8rem,5vw,2.8rem);color:var(--ink);line-height:1.2;margin-bottom:14px;letter-spacing:.5px;}
+h1 .accent{color:var(--gold);font-style:italic;}
+.subtitle{font-size:.95rem;color:var(--ink-soft);font-style:italic;margin-bottom:20px;}
+p.text{font-size:clamp(.95rem,2.4vw,1.05rem);color:var(--ink);margin-bottom:16px;font-weight:300;}
+.bg{position:fixed;inset:0;z-index:0;transition:background 1.2s ease;}
+.bg-1{background:radial-gradient(circle at 20% 20%,#fbe3ec 0%,transparent 55%),radial-gradient(circle at 80% 30%,#e5d6f0 0%,transparent 50%),radial-gradient(circle at 50% 90%,#f7dce8 0%,transparent 60%),#fdf8f2;}
+.bg-2{background:radial-gradient(circle at 70% 30%,#f8d9c9 0%,transparent 55%),radial-gradient(circle at 20% 80%,#f3d5e0 0%,transparent 50%),#fdf4ee;}
+.bg-3{background:radial-gradient(circle at 30% 30%,#fce9d8 0%,transparent 55%),radial-gradient(circle at 80% 70%,#f7dde6 0%,transparent 50%),#fdf9f3;}
+.bg-4{background:radial-gradient(circle at 25% 25%,#e8ddf3 0%,transparent 55%),radial-gradient(circle at 75% 75%,#d6e5dc 0%,transparent 50%),#f9f6ef;}
+.bg-5{background:radial-gradient(circle at 50% 40%,#fbe0e6 0%,transparent 60%),radial-gradient(circle at 20% 90%,#f5e4d0 0%,transparent 55%),#fdf6ef;}
+.bg-6{background:radial-gradient(circle at 15% 30%,#f2d9e5 0%,transparent 55%),radial-gradient(circle at 85% 70%,#e9dcf1 0%,transparent 50%),#fdf8f4;}
+.bg-7{background:linear-gradient(135deg,#fdf8f2 0%,#f9edd8 50%,#fdf8f2 100%);}
+.bg-8{background:radial-gradient(circle at 50% 30%,#fbd5e0 0%,transparent 55%),radial-gradient(circle at 30% 80%,#d8c3e8 0%,transparent 55%),#fdf4f2;}
+.bg-9{background:radial-gradient(circle at 40% 20%,#fae4d2 0%,transparent 55%),radial-gradient(circle at 70% 85%,#f3dbe6 0%,transparent 50%),#fdf9f2;}
+.bg-10{background:radial-gradient(circle at 30% 20%,#dcecfb 0%,transparent 55%),radial-gradient(circle at 80% 80%,#fae2ea 0%,transparent 50%),#fdfaf5;}
+.bg-11{background:radial-gradient(circle at 50% 20%,#fad9e3 0%,transparent 55%),radial-gradient(circle at 30% 85%,#f1dcc0 0%,transparent 55%),#fdf7f0;}
+.bg-12{background:radial-gradient(circle at 25% 25%,#e6daf2 0%,transparent 55%),radial-gradient(circle at 80% 70%,#fbe4d8 0%,transparent 50%),#fdf8f3;}
+.bg-13{background:radial-gradient(circle at 50% 30%,#fcecdc 0%,transparent 55%),radial-gradient(circle at 20% 85%,#eadcf0 0%,transparent 55%),#fdf9f4;}
+.bg-14{background:radial-gradient(circle at 50% 20%,#f7ddc3 0%,transparent 55%),radial-gradient(circle at 30% 90%,#f1d6e2 0%,transparent 50%),#fdf6ee;}
+.bg-15{background:radial-gradient(circle at 20% 20%,#fbd4e0 0%,transparent 50%),radial-gradient(circle at 80% 30%,#d9c5ee 0%,transparent 50%),radial-gradient(circle at 50% 90%,#fbe7c8 0%,transparent 55%),#fdf6f3;}
+.petals{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.petal{position:absolute;top:-40px;font-size:18px;opacity:.7;animation:fall linear infinite;}
+@keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:0;}10%{opacity:.8;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:14px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;z-index:10;background:linear-gradient(0deg,rgba(253,248,242,.95) 0%,rgba(253,248,242,0) 100%);}
+.dots-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:90%;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(184,163,209,.3);transition:all .3s;}
+.dot.active{background:var(--gold);transform:scale(1.4);}
+.nav{display:flex;gap:14px;align-items:center;}
+.nav button{font-family:'Montserrat',sans-serif;font-size:.85rem;padding:10px 22px;border-radius:30px;border:1.5px solid var(--gold-soft);background:rgba(255,255,255,.85);color:var(--ink);cursor:pointer;transition:all .3s ease;letter-spacing:.5px;backdrop-filter:blur(6px);}
+.nav button:hover:not(:disabled){background:var(--gold-soft);color:#fff;transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,168,106,.3);}
+.nav button:disabled{opacity:.3;cursor:default;}
+.counter-label{font-size:.75rem;color:var(--ink-soft);letter-spacing:1.5px;}
+.btn{font-family:'Montserrat',sans-serif;font-size:.95rem;padding:14px 32px;border-radius:40px;border:none;background:linear-gradient(135deg,var(--pink-deep),var(--lavender-deep));color:#fff;cursor:pointer;transition:all .35s ease;letter-spacing:.5px;margin-top:8px;box-shadow:0 10px 25px rgba(184,163,209,.35);}
+.btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 15px 35px rgba(184,163,209,.5);}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--gold-soft);box-shadow:none;}
+.btn.ghost:hover{background:rgba(227,203,149,.2);}
+.popup{margin-top:18px;padding:18px;background:rgba(255,255,255,.9);border-left:3px solid var(--gold);border-radius:14px;font-style:italic;color:var(--ink);font-size:.95rem;animation:fadeUp .6s ease both;}
+.pulse-heart{display:inline-block;font-size:1.5rem;animation:pulse 1.4s ease-in-out infinite;vertical-align:middle;margin-left:6px;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
+.slider-wrap{margin-top:22px;}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,#f9d9b6,#e8b6c8,#b8a3d1);outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid var(--gold);cursor:pointer;}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;}
+@media(max-width:480px){.cards{grid-template-columns:1fr;}}
+.card{padding:16px;border-radius:16px;background:rgba(255,255,255,.85);border:1px solid rgba(201,168,106,.3);cursor:pointer;transition:all .35s ease;font-size:.9rem;text-align:left;}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 25px rgba(184,163,209,.2);}
+.card .icon{font-size:1.4rem;display:block;margin-bottom:6px;}
+.card .title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--ink);}
+.card .body{display:none;margin-top:8px;font-size:.85rem;color:var(--ink-soft);font-style:italic;}
+.card.open .body{display:block;animation:fadeUp .5s ease both;}
+.carousel{position:relative;margin-top:20px;overflow:hidden;border-radius:18px;background:rgba(255,255,255,.75);min-height:120px;}
+.slide{padding:26px 40px;text-align:center;font-style:italic;font-size:.95rem;color:var(--ink);display:none;}
+.slide.active{display:block;animation:fadeUp .6s ease both;}
+.car-nav{display:flex;justify-content:center;gap:14px;margin-top:12px;}
+.car-nav button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold-soft);background:rgba(255,255,255,.85);color:var(--gold);font-size:1rem;cursor:pointer;transition:all .3s;}
+.car-nav button:hover{background:var(--gold-soft);color:#fff;}
+.heart-game{position:relative;height:220px;margin-top:18px;background:rgba(255,255,255,.45);border-radius:18px;overflow:hidden;}
+.petal-piece{position:absolute;font-size:24px;cursor:pointer;user-select:none;transition:all .4s ease;}
+.petal-piece.picked{opacity:0;pointer-events:none;transform:scale(0);}
+.clouds{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-top:18px;}
+.cloud{padding:14px 8px;border-radius:50px;background:rgba(255,255,255,.85);border:1px solid rgba(201,168,106,.3);cursor:pointer;font-size:.82rem;transition:all .35s ease;min-height:66px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-soft);}
+.cloud:hover{transform:translateY(-3px);}
+.cloud.revealed{background:linear-gradient(135deg,#fbe4ec,#e6dcf3);color:var(--ink);font-style:italic;font-size:.78rem;}
+.medal{width:140px;height:140px;margin:18px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f6e2b8,#c9a86a);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-size:.9rem;text-align:center;padding:14px;box-shadow:0 15px 35px rgba(201,168,106,.45);animation:medalPop .8s cubic-bezier(.34,1.56,.64,1) both;line-height:1.2;}
+@keyframes medalPop{0%{transform:scale(0) rotate(-180deg);opacity:0;}100%{transform:scale(1) rotate(0);opacity:1;}}
+.checklist{text-align:left;margin-top:18px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;cursor:pointer;border-bottom:1px solid rgba(201,168,106,.2);font-size:.92rem;transition:opacity .3s;}
+.check-item .box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;transition:all .3s;margin-top:2px;}
+.check-item.checked .box{background:var(--gold);}
+.check-item.checked .label{text-decoration:line-through;opacity:.5;}
+.signature{margin-top:16px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:var(--gold);animation:fadeUp .8s ease both;}
+.seal{width:110px;height:110px;margin:20px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d98a9a,#a13a52);display:flex;align-items:center;justify-content:center;color:#fdf0e0;font-family:'Cormorant Garamond',serif;font-size:1.1rem;text-align:center;box-shadow:0 10px 25px rgba(161,58,82,.45);animation:sealStamp .8s cubic-bezier(.34,1.56,.64,1) both;padding:10px;line-height:1.2;}
+@keyframes sealStamp{0%{transform:scale(2) rotate(-20deg);opacity:0;}60%{transform:scale(.9) rotate(3deg);opacity:1;}100%{transform:scale(1) rotate(0);opacity:1;}}
+.envelope{font-size:5rem;margin:8px 0;cursor:pointer;transition:all .6s ease;display:inline-block;}
+.envelope.open{transform:translateY(-8px) scale(1.15);}
+.confetti{position:fixed;top:-20px;font-size:22px;pointer-events:none;z-index:100;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+.deco-frame{margin:16px auto;padding:20px;max-width:320px;border:1.5px solid rgba(201,168,106,.4);border-radius:18px;background:rgba(255,255,255,.5);position:relative;}
+.deco-frame::before,.deco-frame::after{content:"🌸";position:absolute;font-size:1.1rem;opacity:.7;}
+.deco-frame::before{top:6px;left:10px;}
+.deco-frame::after{bottom:6px;right:10px;}
+.deco-frame p{font-style:italic;font-size:.88rem;color:var(--ink-soft);}
+.like-heart{font-size:2rem;cursor:pointer;transition:transform .3s;display:inline-block;margin-top:14px;user-select:none;}
+.like-heart:hover{transform:scale(1.2);}
+.like-heart.liked{animation:heartBeat .6s ease;}
+@keyframes heartBeat{0%,100%{transform:scale(1);}30%{transform:scale(1.4);}60%{transform:scale(.9);}}
+.like-count{font-size:.8rem;color:var(--ink-soft);display:block;margin-top:4px;}
+.fade-seq{opacity:0;transform:translateY(14px);transition:opacity .9s ease,transform .9s ease;}
+.fade-seq.visible{opacity:1;transform:translateY(0);}
+.counter-box{display:inline-block;padding:20px 30px;background:rgba(255,255,255,.75);border-radius:18px;margin-top:18px;box-shadow:0 10px 25px rgba(184,163,209,.15);}
+.counter-box .label{font-size:.78rem;color:var(--ink-soft);letter-spacing:1px;}
+.counter-box .num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;color:var(--gold);display:block;line-height:1.1;margin:6px 0;}
+.counter-box .unit{font-size:.82rem;color:var(--ink-soft);}
+.quote-box{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3.5vw,2rem);font-style:italic;color:var(--ink);text-align:center;line-height:1.5;}
+@media(max-width:600px){
+.page{padding:70px 12px 130px;}
+.content{padding:24px 16px;border-radius:20px;}
+.nav button{padding:9px 16px;font-size:.78rem;}
+.btn{padding:12px 24px;font-size:.88rem;}
+.medal{width:110px;height:110px;font-size:.8rem;}
+.envelope{font-size:3.5rem;}
+.slide{padding:22px 24px;}
+}
 </style>
 </head>
 <body>
-
 <div class="bg bg-1" id="bg"></div>
 <div class="petals" id="petals"></div>
-
-<div class="top-bar">
-  <span class="hint" id="topHint">маленькое послание от дочки и сына</span>
-</div>
-
 <div class="app" id="app">
-
   <!-- ============ 1 ОБЛОЖКА ============ -->
-  <section class="page active" data-bg="bg-1">
-    <div class="content">
-      <div style="font-size:.8rem;color:var(--ink-soft);letter-spacing:1px;margin-bottom:14px;">сегодня ты прочитаешь <b>15 тёплых слов</b> о себе</div>
-      <div class="envelope" id="envelope">💌</div>
-      <h1>Мамочка, с Днём <span class="accent">Матери!!</span></h1>
-      <p class="subtitle">послание от твоих детей — дочки и сына</p>
-      <p class="text">сегодня весь мир говорит о мамах. в новостях, в рекламе, в чужих словах — везде звучит это слово. но мы хотим сказать его только тебе. не вообще «маме», а именно тебе — нашей, родной, единственной.</p>
-      <p class="text">это письмо мы собирали вдвоём. долго думали, с чего начать, какие слова найти, чтобы ты почувствовала то, что мы чувствуем каждый день, но не всегда умеем сказать вслух. здесь — наши воспоминания. наша благодарность. наша любовь, которая больше любых слов.</p>
-      <p class="text">не спеши. открывай его медленно — как пьёшь свой любимый кофе, который хочется смаковать. пусть каждая страница будет глотком тепла. и знай: за этими пятнадцатью страницами — целая жизнь, в которой ты — самое главное.</p>
-      <button class="btn" onclick="openEnvelope()">Открыть письмо</button>
-      <div id="envelopeMsg"></div>
-    </div>
-  </section>
+<section class="page active" data-bg="bg-1">
+<div class="content">
+<div class="counter-label">сегодня ты прочитаешь <b>15 тёплых слов</b> о себе</div>
+<div class="envelope" id="envelope" onclick="openEnvelope()">💌</div>
+<h1>Мамочка, с Днём <span class="accent">Матери!!</span></h1>
+<p class="subtitle">послание от твоих детей — дочки и сына</p>
+<p class="text">сегодня весь мир говорит о мамах. в новостях, в рекламе, в чужих словах — везде звучит это слово. но мы хотим сказать его только тебе. не вообще «маме», а именно тебе — нашей, родной, единственной.</p>
+<p class="text">это письмо мы собирали вдвоём. долго думали, с чего начать, какие слова найти, чтобы ты почувствовала то, что мы чувствуем каждый день, но не всегда умеем сказать вслух. здесь — наши воспоминания. наша благодарность. наша любовь, которая больше любых слов.</p>
+<p class="text">не спеши. открывай его медленно — как пьёшь свой любимый кофе, который хочется смаковать. пусть каждая страница будет глотком тепла. и знай: за этими пятнадцатью страницами — целая жизнь, в которой ты — самое главное.</p>
+</div>
+</section>
 
-  <!-- ============ 2 ============ -->
-  <section class="page" data-bg="bg-2">
-    <div class="content">
-      <h1>Спасибо, что подарила нам жизнь</h1>
-      <p class="text">мама, ты — первое, что мы увидели в этом мире. первое, что мы почувствовали. первое, что мы полюбили — ещё не понимая, что такое любовь.</p>
-      <p class="text">твои руки были нашей первой колыбелью. ты держала нас так бережно, будто мы были сделаны из хрупкого стекла. твой голос был первой песней, под которую мы засыпали — и даже сейчас, спустя столько лет, когда нам грустно, мы вспоминаем его, и становится легче. твоя улыбка была первым солнцем, которое нас согрело. твоё сердце стало первым домом, в котором мы жили.</p>
-      <p class="text">мы не помним тот день, когда родились. но мы точно знаем: в ту самую минуту, когда ты впервые взяла нас на руки, ты стала для нас целым миром. всё, что мы умеем чувствовать, мечтать и любить — началось с тебя. с твоей нежности, с твоего терпения, с твоей бесконечной любви, которой ты окружила нас с первого вздоха.</p>
-      <p class="text">спасибо тебе за жизнь. за то, что ты выбрала её для нас. за то, что каждый день — с самого начала и до сегодня — ты остаёшься нашим самым родным человеком.<span class="pulse-heart">❤</span></p>
-      <button class="btn ghost" onclick="showSecret()">Нажми, чтобы узнать секрет</button>
-      <div id="secretBox"></div>
-    </div>
-  </section>
+<!-- ============ 2 ============ -->
+<section class="page" data-bg="bg-2">
+<div class="content">
+<h1>Спасибо, что подарила нам жизнь</h1>
+<p class="text">мама, ты — первое, что мы увидели в этом мире. первое, что мы почувствовали. первое, что мы полюбили — ещё не понимая, что такое любовь.</p>
+<p class="text">твои руки были нашей первой колыбелью. ты держала нас так бережно, будто мы были сделаны из хрупкого стекла. твой голос был первой песней, под которую мы засыпали — и даже сейчас, спустя столько лет, когда нам грустно, мы вспоминаем его, и становится легче. твоя улыбка была первым солнцем, которое нас согрело. твоё сердце стало первым домом, в котором мы жили.</p>
+<p class="text">мы не помним тот день, когда родились. но мы точно знаем: в ту самую минуту, когда ты впервые взяла нас на руки, ты стала для нас целым миром. всё, что мы умеем чувствовать, мечтать и любить — началось с тебя. с твоей нежности, с твоего терпения, с твоей бесконечной любви, которой ты окружила нас с первого вздоха.</p>
+<p class="text">спасибо тебе за жизнь. за то, что ты выбрала её для нас. за то, что каждый день — с самого начала и до сегодня — ты остаёшься нашим самым родным человеком.<span class="pulse-heart">❤</span></p>
+<button class="btn ghost" onclick="showSecret()">Нажми, чтобы узнать секрет</button>
+<div id="secretBox"></div>
+</div>
+</section>
 
-  <!-- ============ 3 ============ -->
-  <section class="page" data-bg="bg-3">
-    <div class="content">
-      <h1>Спасибо за твоё тепло</h1>
-      <p class="text">мы помним запах твоих завтраков — даже когда ты уставала, ты всё равно вставала раньше всех. мы помним, как ты читала нам перед сном, и голос твой становился тише, а мы делали вид, что уже спим, чтобы ты посидела с нами ещё чуть-чуть.</p>
-      <p class="text">мы помним, как ты собирала нас в школу. как проверяла, всё ли мы взяли, поправляла воротничок, целовала в макушку и говорила: «удачного дня». и ты провожала нас до школы — и мы шли, зная, что за спиной у нас есть человек, который всегда нас ждёт.</p>
-      <p class="text">мы помним объятия, в которых всегда было безопасно — даже если весь мир рушился. помним, как ты слушала нас — не перебивая, не торопя, не осуждая. ты умеешь слушать так, как не умеет никто. твоя любовь — это дом, куда мы всегда можем вернуться. и мы знаем: там всегда горит свет. и там всегда ждут.</p>
-      <p class="text">спасибо за это тепло. за то, что даже в самые обычные утра ты делала нашу жизнь уютной. мы это помним. мы это ценим. мы это никогда не забудем.</p>
-      <button class="btn ghost" onclick="showRecipe()">Нажми на чашку</button>
-      <div id="recipeBox"></div>
-      <div class="slider-wrap">
-        <label style="font-size:.85rem;color:var(--ink-soft);">уровень уюта</label>
-        <input type="range" min="0" max="100" value="50" oninput="changeCozy(this.value)">
-      </div>
-    </div>
-  </section>
+<!-- ============ 3 ============ -->
+<section class="page" data-bg="bg-3">
+<div class="content">
+<h1>Спасибо за твоё тепло</h1>
+<p class="text">мы помним запах твоих завтраков — даже когда ты уставала, ты всё равно вставала раньше всех. мы помним, как ты читала нам перед сном, и голос твой становился тише, а мы делали вид, что уже спим, чтобы ты посидела с нами ещё чуть-чуть.</p>
+<p class="text">мы помним, как ты собирала нас в школу. как проверяла, всё ли мы взяли, поправляла воротничок, целовала в макушку и говорила: «удачного дня». и ты провожала нас до школы — и мы шли, зная, что за спиной у нас есть человек, который всегда нас ждёт.</p>
+<p class="text">мы помним объятия, в которых всегда было безопасно — даже если весь мир рушился. помним, как ты слушала нас — не перебивая, не торопя, не осуждая. ты умеешь слушать так, как не умеет никто. твоя любовь — это дом, куда мы всегда можем вернуться. и мы знаем: там всегда горит свет. и там всегда ждут.</p>
+<p class="text">спасибо за это тепло. за то, что даже в самые обычные утра ты делала нашу жизнь уютной. мы это помним. мы это ценим. мы это никогда не забудем.</p>
+<button class="btn ghost" onclick="showRecipe()">Нажми на чашку</button>
+<div id="recipeBox"></div>
+<div class="slider-wrap">
+<label style="font-size:.82rem;color:var(--ink-soft);">уровень уюта</label>
+<input type="range" min="0" max="100" value="50" oninput="changeCozy(this.value)">
+</div>
+</div>
+</section>
 
-  <!-- ============ 4 ============ -->
-  <section class="page" data-bg="bg-4">
-    <div class="content">
-      <h1>Спасибо за твои уроки</h1>
-      <p class="text">ты не читала нам нотаций. не заставляла заучивать правила. ты просто жила так, что нам хотелось быть похожими на тебя. каждый твой поступок, каждое слово, каждый взгляд — стали для нас учебником, по которому мы учились быть людьми.</p>
-      <p class="text">ты научила меня быть сильной, но не терять нежность. показала, что можно нести ответственность и при этом оставаться мягкой. — от дочки.</p>
-      <p class="text">а меня ты научила не бояться ошибок. показала, что падать — не стыдно, стыдно — не вставать. и что настоящая сила — не в кулаках, а в умении признать, что ты неправ. — от сына.</p>
-      <p class="text">ты научила нас просить прощения и уметь прощать. быть честными, но добрыми. идти к мечте, но не забывать о близких. ты научила нас любить себя — хотя бы потому, что ты любила нас так, что в это невозможно было не поверить.</p>
-      <p class="text">мы смотрим на тебя — и понимаем, какими людьми хотим стать. не кем-то великим из книжек, а вот такими: тёплыми, честными, любящими. такими, как ты.</p>
-      <div class="cards">
-        <div class="card" onclick="this.classList.toggle('open')">
-          <span class="icon">🌸</span>
-          <div class="title">Урок нежности</div>
-          <div class="body">ты показала, что сила — в мягкости.</div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('open')">
-          <span class="icon">🌿</span>
-          <div class="title">Урок силы</div>
-          <div class="body">ты никогда не сдавалась, даже когда было трудно.</div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('open')">
-          <span class="icon">✨</span>
-          <div class="title">Урок честности</div>
-          <div class="body">ты всегда говорила правду — мягко, но прямо.</div>
-        </div>
-        <div class="card" onclick="this.classList.toggle('open')">
-          <span class="icon">❤</span>
-          <div class="title">Урок любви</div>
-          <div class="body">ты любила без условий. этому мы учимся до сих пор.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- ============ 4 ============ -->
+<section class="page" data-bg="bg-4">
+<div class="content">
+<h1>Спасибо за твои уроки</h1>
+<p class="text">ты не читала нам нотаций. не заставляла заучивать правила. ты просто жила так, что нам хотелось быть похожими на тебя. каждый твой поступок, каждое слово, каждый взгляд — стали для нас учебником, по которому мы учились быть людьми.</p>
+<p class="text">ты научила меня быть сильной, но не терять нежность. показала, что можно нести ответственность и при этом оставаться мягкой. — от дочки.</p>
+<p class="text">а меня ты научила не бояться ошибок. показала, что падать — не стыдно, стыдно — не вставать. и что настоящая сила — не в кулаках, а в умении признать, что ты неправ. — от сына.</p>
+<p class="text">ты научила нас просить прощения и уметь прощать. быть честными, но добрыми. идти к мечте, но не забывать о близких. ты научила нас любить себя — хотя бы потому, что ты любила нас так, что в это невозможно было не поверить.</p>
+<p class="text">мы смотрим на тебя — и понимаем, какими людьми хотим стать. не кем-то великим из книжек, а вот такими: тёплыми, честными, любящими. такими, как ты.</p>
+<div class="cards">
+<div class="card" onclick="this.classList.toggle('open')"><span class="icon">🌸</span><div class="title">Урок нежности</div><div class="body">ты показала, что сила — в мягкости.</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><span class="icon">🌿</span><div class="title">Урок силы</div><div class="body">ты никогда не сдавалась, даже когда было трудно.</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><span class="icon">✨</span><div class="title">Урок честности</div><div class="body">ты всегда говорила правду — мягко, но прямо.</div></div>
+<div class="card" onclick="this.classList.toggle('open')"><span class="icon">❤</span><div class="title">Урок любви</div><div class="body">ты любила без условий. этому мы учимся до сих пор.</div></div>
+</div>
+</div>
+</section>
 
-  <!-- ============ 5 ============ -->
-  <section class="page" data-bg="bg-5">
-    <div class="content">
-      <h1>Спасибо, что всегда рядом</h1>
-      <p class="text">в моменты сомнений ты говорила: «у тебя получится». всего три слова — а мы верили. верили не в себя, а в тебя. потому что если это говорила ты — значит, так и есть. ты просто не могла ошибаться.</p>
-      <p class="text">ты верила в нас даже тогда, когда мы сами в себя не верили. ты видела в нас то, чего мы не видели. ты была нашим тылом — тем самым, о который можно опереться, не боясь упасть.</p>
-      <p class="text">ты была нашим компасом, когда мы терялись. нашим самым громким болельщиком, когда мы побеждали. нашей тихой гаванью, когда штормило.</p>
-      <p class="text">и мы знаем: чтобы ни случилось
+<!-- ============ 5 ============ -->
+<section class="page" data-bg="bg-5">
+<div class="content">
+<h1>Спасибо, что всегда рядом</h1>
+<p class="text">в моменты сомнений ты говорила: «у тебя получится». всего три слова — а мы верили. верили не в себя, а в тебя. потому что если это говорила ты — значит, так и есть. ты просто не могла ошибаться.</p>
+<p class="text">ты верила в нас даже тогда, когда мы сами в себя не верили. ты видела в нас то, чего мы не видели. ты была нашим тылом — тем самым, о который можно опереться, не боясь упасть.</p>
+<p class="text">ты была нашим компасом, когда мы терялись. нашим самым громким болельщиком, когда мы побеждали. нашей тихой гаванью, когда штормило.</p>
+<p class="text">и мы знаем: чтобы ни случилось, ты всегда будешь рядом. это не вопрос веры. это факт. спасибо тебе за это.</p>
+<button class="btn ghost" onclick="showSupport()">Нажми, если нужна поддержка</button>
+<div id="supportBox"></div>
+</div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="page" data-bg="bg-6">
+<div class="content">
+<h1>Наши самые тёплые моменты</h1>
+<p class="text">наша жизнь — это сотни маленьких кадров. их не покажут в кино, они не попадут в новости. но для нас они — самое дорогое, что у нас есть.</p>
+<p class="text">как мы плавали на лодках в Бресте — это было теплое воспоминание. мы хорошо провели время, посмеялись с забавных уточек, которые подплывали к нам совсем близко. а ещё мы катались на колесе обозрения — и с высоты смотрели на город, который стал для нас родным. как ты читала нам вслух, и мы слушали, затаив дыхание. как мы смотрели фильмы под одним пледом — это одна из самых приятных традиций в нашей семье. как ты смеялась над нашими шутками — даже над самыми несмешными, потому что для тебя они были смешными только потому, что их говорили мы.</p>
+<p class="text">эти моменты — наше самое большое богатство. и мы хотим, чтобы их было ещё больше. много-много. целую жизнь.</p>
+<div class="carousel">
+<div class="slide active">как мы плавали на лодках в Бресте</div>
+<div class="slide">как катались на колесе обозрения</div>
+<div class="slide">как ты читала нам вслух</div>
+<div class="slide">как смотрели фильмы под одним пледом</div>
+</div>
+<div class="car-nav"><button onclick="carPrev()">←</button><button onclick="carNext()">→</button></div>
+</div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section class="page" data-bg="bg-7">
+<div class="content no-card">
+<div class="quote-box">«мама — это единственный человек на земле, который любит тебя больше, чем себя.»</div>
+<p class="text" style="margin-top:24px;">и мы это чувствуем каждый день. спасибо, что ты — наша.</p>
+</div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section class="page" data-bg="bg-8">
+<div class="content">
+<h1>Ты — наше сердце</h1>
+<p class="text">ты не просто наша мама. ты — наша подруга, наш советчик, наша опора. ты — человек, которому мы звоним первыми. и когда у нас что-то хорошее, и когда плохое. ты — единственная, кому можно рассказать всё, и ты не осудишь, не посмеёшься. ты просто выслушаешь. и скажешь что-то, после чего станет легче.</p>
+<p class="text">ты знаешь наши секреты и хранишь их лучше любого сейфа. ты смеёшься над нашими шутками и плачешь над нашими слезами. ты радуешься нашим победам так, будто это твои победы. и переживаешь наши неудачи так, будто это твои неудачи. между нами нет границ. между нами — только любовь.</p>
+<p class="text">спасибо, что ты есть. мы любим тебя больше, чем можем выразить словами. и даже это письмо — лишь маленькая часть того, что мы чувствуем. просто иногда слова заканчиваются, а любовь — нет. она бесконечна. как ты для нас.</p>
+</div>
+</section>
+
+<!-- ============ 9 ============ -->
+<section class="page" data-bg="bg-9">
+<div class="content">
+<h1>Слова, которые мы не всегда говорим вслух</h1>
+<p class="text fade-seq">мама, мы не всегда говорим это. может быть, потому что стесняемся. может быть, потому что думаем, что ты и так знаешь. но сегодня мы скажем.</p>
+<p class="text fade-seq">мы очень тобой гордимся. ты столько всего вынесла — и осталась такой же светлой. жизнь не всегда была к тебе добра, но ты не ожесточилась. ты не сдалась. ты прошла через всё и сохранила своё сердце — тёплое, любящее, живое. мы гордимся твоей силой. твоим умением любить. твоим умением прощать. тобой.</p>
+<p class="text fade-seq">прости нас за моменты, когда мы были резкими. за слова, которые говорили не подумав. за вечера, когда мы были заняты не тобой. за звонки, которые не сделали. за объятия, которые не подарили. мы знаем: ты всегда всё понимаешь. но мы всё равно просим прощения.</p>
+<p class="text fade-seq">и мы хотим, чтобы ты знала: мы видим всё, что ты для нас сделала. каждую бессонную ночь. каждую жертву. каждое «мне не надо, купите детям». мы всё видим. и мы бесконечно благодарны.</p>
+</div>
+</section>
+
+<!-- ============ 10 ============ -->
+<section class="page" data-bg="bg-10">
+<div class="content">
+<h1>100 причин, почему мы тебя любим</h1>
+<p class="text">мы могли бы написать сто причин. или тысячу. мы могли бы перечислять их до утра — за твою улыбку, за твои советы, за твои объятия, за твоё терпение, за твою веру в нас. но если честно — все эти причины сводятся к одной.</p>
+<p class="text">мы любим тебя просто за то, что ты есть. за то, что ты — наша мама. не за что-то. не потому что ты что-то сделала. а просто потому, что ты — это ты. и этого достаточно. этого более чем достаточно.</p>
+<p class="text">любить тебя — это не выбор. это наша природа. это то, что мы не выбирали, но что делает нас счастливыми каждый день.</p>
+<div class="clouds" id="clouds"></div>
+<p class="subtitle" style="margin-top:14px;">открыто <span id="cloudCount">0</span> из 10 причин</p>
+</div>
+</section>
+
+<!-- ============ 11 ============ -->
+<section class="page" data-bg="bg-11">
+<div class="content">
+<h1>Ты — лучшая мама на свете</h1>
+<p class="text">есть миллионы мам на планете. у каждой — свои дети, свои истории, своя любовь. но ты — единственная, кто стал для нас всем.</p>
+<p class="text">ты умеешь то, что не умеет никто: превращать обычный день в праздник. находить слова, когда кажется, что их нет. делать так, чтобы грусть превращалась в надежду, а страх — в уверенность. ты делаешь мир добрее просто потому, что ты в нём есть.</p>
+<p class="text">мы хотим, чтобы ты знала: для нас ты — лучшая. и это не потому, что ты наша мама. это было бы слишком просто. ты — лучшая потому, что ты — это ты. со всеми твоими веснушками, которые мы любим. с твоим сердцем, которое бьётся для нас.</p>
+<p class="text">ты — лучшая. и мы никогда не устанем это повторять.</p>
+<button class="btn" onclick="showMedal()">Медаль для мамы</button>
+<div id="medalBox"></div>
+</div>
+</section>
+
+<!-- ============ 12 ============ -->
+<section class="page" data-bg="bg-12">
+<div class="content">
+<h1>Что мы тебе обещаем</h1>
+<p class="text">обещания — это серьёзно. мы не будем обещать то, что не сможем выполнить — этому мы научились у тебя, мама. но то, что скажем сейчас — выполним обязательно.</p>
+<div class="checklist">
+<div class="check-item" onclick="this.classList.toggle('checked')"><div class="box">✓</div><span class="label">я обещаю звонить чаще — не только когда что-то нужно, а просто так</span></div>
+<div class="check-item" onclick="this.classList.toggle('checked')"><div class="box">✓</div><span class="label">я обещаю помогать — по дому, в любой мелочи, и не ждать, пока попросишь</span></div>
+<div class="check-item" onclick="this.classList.toggle('checked')"><div class="box">✓</div><span class="label">мы обещаем приезжать в будущем, даже если устали или «некогда»</span></div>
+<div class="check-item" onclick="this.classList.toggle('checked')"><div class="box">✓</div><span class="label">мы обещаем обнимать тебя крепче и говорить «я тебя люблю» без повода</span></div>
+<div class="check-item" onclick="this.classList.toggle('checked')"><div class="box">✓</div><span class="label">мы обещаем заботиться о тебе так, как ты заботилась о нас</span></div>
+</div>
+<button class="btn" onclick="showPromise()">Мы обещаем</button>
+<div id="promiseBox"></div>
+</div>
+</section>
+
+<!-- ============ 13 ============ -->
+<section class="page" data-bg="bg-13">
+<div class="content">
+<h1>Самое дорогое — это время с тобой</h1>
+<p class="text">мы поняли одну важную вещь. поздно, но поняли. самые ценные моменты в жизни — это не подарки и не праздники. это не деньги и не вещи. это обычные вечера, когда мы просто сидим рядом и разговариваем. обо всём. ни о чём. просто рядом.</p>
+<p class="text">это твои звонки, когда ты просто хочешь узнать, как у нас дела. это твои советы, которые мы сначала не слушаем, а потом понимаем, что ты была права. это твои объятия, которые мы иногда отталкиваем в подростковом возрасте — а потом жалеем. это твоё «поешь?», «не замёрзла?», «осторожнее». слова, которые раздражают, пока ты рядом. и за которые отдашь всё, когда тебя нет.</p>
+<p class="text">спасибо за каждый такой момент. их не заменить ничем. никакими деньгами, никакими подарками. только тобой. только временем, которое мы проводим вместе.</p>
+<p class="text">мы хотим, чтобы этого времени было больше. гораздо больше. целые годы. целые десятилетия. вся наша жизнь — рядом с тобой.</p>
+<div class="counter-box">
+<div class="label">мы вместе уже</div>
+<span class="num" id="daysCounter">0</span>
+<div class="unit">дней. и это только начало</div>
+</div>
+</div>
+</section>
+
+<!-- ============ 14 ============ -->
+<section class="page" data-bg="bg-14">
+<div class="content">
+<h1>Письмо в будущее</h1>
+<p class="text">мама, мы знаем: время идёт. мы растём. ты меняешься. когда-нибудь у нас будут свои семьи, свои дети, свои заботы. мы не всегда сможем быть рядом так часто, как хотелось бы. это жизнь. но мы хотим, чтобы ты кое-что знала.</p>
+<p class="text">что бы ни случилось — мы всегда будем рядом. не обязательно физически. но всегда — сердцем. мы будем заботиться о тебе, когда ты устанешь. мы будем смешить тебя, когда тебе будет грустно. мы будем держать тебя за руку — так же, как ты держала нас, когда мы делали первые шаги.</p>
+<p class="text">мы будем любить тебя так же, как ты любила нас. тихо. постоянно. без условий. это письмо — обещание. и мы его сдержим.</p>
+<button class="btn" onclick="sealLetter()">Запечатать письмо</button>
+<div id="sealBox"></div>
+</div>
+</section>
+
+<!-- ============ 15 ============ -->
+<section class="page" data-bg="bg-15">
+<div class="content">
+<h1>Мы тебя любим ❤️</h1>
+<p class="text">с Днём Матери, родная. спасибо, что ты есть. спасибо за жизнь, за тепло, за уроки, за поддержку, за любовь. за всё, что ты сделала и продолжаешь делать для нас.</p>
+<p class="text">пусть каждый твой день будет таким же тёплым, каким ты делаешь каждый наш день. пусть твои глаза чаще улыбаются, а сердце реже болит. пусть рядом всегда будут люди, которые тебя любят так, как ты этого заслуживаешь. и пусть ты знаешь: мы — рядом. всегда.</p>
+<p class="text">ты — наше сердце. ты — наш дом. ты — наша мама. и мы любим тебя больше всего на свете.</p>
+<p class="signature">с любовью, твои дочка и сын 💕</p>
+<button class="btn" onclick="hugMom()">Обнять маму 🤗</button>
+<div style="text-align:center;margin-top:14px;">
+<span class="like-heart" id="likeHeart" onclick="toggleLike()">🤍</span>
+<span class="like-count" id="likeCount">нажми, если письмо тебе понравилось</span>
+</div>
+</div>
+</section>
+
+</div>
+<div class="bottom-bar">
+<div class="dots-row" id="dotsRow"></div>
+<div class="nav">
+<button id="prevBtn" onclick="goPrev()">← Назад</button>
+<button id="nextBtn" onclick="goNext()">Далее →</button>
+</div>
+</div>
+<script>
+// ===== НАВИГАЦИЯ =====
+const pages = document.querySelectorAll('.page');
+let current = 0;
+const total = pages.length;
+const dotsRow = document.getElementById('dotsRow');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const bg = document.getElementById('bg');
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  dotsRow.appendChild(d);
+}
+const dots = document.querySelectorAll('.dot');
+function showPage(n) {
+  if (n < 0 || n >= total) return;
+  pages[current].classList.remove('active');
+  dots[current].classList.remove('active');
+  current = n;
+  pages[current].classList.add('active');
+  dots[current].classList.add('active');
+  bg.className = 'bg ' + pages[current].dataset.bg;
+  prevBtn.disabled = current === 0;
+  nextBtn.textContent = current === total - 1 ? 'В начало' : 'Далее →';
+  pages[current].scrollTop = 0;
+  if (current === 8) setTimeout(showFadeSeq, 400);
+  if (current === 12) startCounter();
+}
+function goNext() { if (current === total - 1) showPage(0); else showPage(current + 1); }
+function goPrev() { showPage(current - 1); }
+prevBtn.disabled = true;
+
+// ===== ЛЕПЕСТКИ =====
+const petals = document.getElementById('petals');
+const petalChars = ['🌸','🌷','💮','🌺','❤','🤍','💗'];
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = petalChars[Math.floor(Math.random() * petalChars.length)];
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (8 + Math.random() * 8) + 's';
+  p.style.animationDelay = (Math.random() * 10) + 's';
+  p.style.fontSize = (12 + Math.random() * 12) + 'px';
+  petals.appendChild(p);
+}
+
+// ===== КОНВЕРТ =====
+function openEnvelope() {
+  const env = document.getElementById('envelope');
+  if (env.classList.contains('open')) return;
+  env.classList.add('open');
+  const msg = document.getElementById('envelopeMsg');
+  msg.innerHTML = '<div class="popup">с любовью, от твоих детей. читай медленно.</div>';
+}
+
+// ===== СЕКРЕТ =====
+function showSecret() {
+  const box = document.getElementById('secretBox');
+  box.innerHTML = '<div class="popup">ты плакала от счастья, когда впервые взяла нас на руки. мы это чувствуем до сих пор.</div>';
+}
+
+// ===== РЕЦЕПТ =====
+function showRecipe() {
+  const box = document.getElementById('recipeBox');
+  box.innerHTML = '<div class="popup">рецепт твоего тепла: 1 щепотка терпения, 2 ложки заботы, бесконечная любовь. подавать каждое утро.</div>';
+}
+
+// ===== УЮТ =====
+function changeCozy(val) {
+  const v = Number(val);
+  const hue1 = 40 + v * 0.4;
+  const hue2 = 280 + v * 0.3;
+  document.querySelector('.page.active').style.background =
+    'radial-gradient(circle at 30% 30%, hsla(' + hue1 + ',70%,88%,0.5), transparent 60%),' +
+    'radial-gradient(circle at 70% 70%, hsla(' + hue2 + ',60%,85%,0.5), transparent 60%)';
+}
+
+// ===== ПОДДЕРЖКА =====
+const supportPhrases = ['у тебя получится', 'я в тебя верю', 'ты справишься', 'всё будет хорошо'];
+let supIdx = 0;
+function showSupport() {
+  const box = document.getElementById('supportBox');
+  box.innerHTML = '<div class="popup">' + supportPhrases[supIdx] + '</div>';
+  supIdx = (supIdx + 1) % supportPhrases.length;
+}
+
+// ===== КАРУСЕЛЬ =====
+let carIdx = 0;
+const carSlides = document.querySelectorAll('#carousel .slide');
+function carNext() { if (!carSlides.length) return; carSlides[carIdx].classList.remove('active'); carIdx = (carIdx + 1) % carSlides.length; carSlides[carIdx].classList.add('active'); }
+function carPrev() { if (!carSlides.length) return; carSlides[carIdx].classList.remove('active'); carIdx = (carIdx - 1 + carSlides.length) % carSlides.length; carSlides[carIdx].classList.add('active'); }
+
+// ===== ПРОЯВЛЕНИЕ АБЗАЦЕВ (СТР 9) =====
+function showFadeSeq() {
+  const items = document.querySelectorAll('#app .page:nth-child(9) .fade-seq');
+  items.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 900));
+}
+
+// ===== ОБЛАКА ПРИЧИН =====
+const reasons = [
+  'за твою улыбку — она согревает даже в хмурый день',
+  'за твои советы, которые мы сначала не слушаем',
+  'за твоё терпение с нашей подростковой вредностью',
+  'за твои объятия, в которых всегда безопасно',
+  'за твою веру в нас — ты видела больше, чем мы сами',
+  'за твой смех — он заразительный',
+  'за твою доброту — ты помогаешь, не ожидая в ответ',
+  'за твою силу — ты всё вынесла и осталась светлой',
+  'за твоё умение слушать — ты слышишь между строк',
+  'за то, что ты просто есть'
+];
+const cloudsBox = document.getElementById('clouds');
+if (cloudsBox) {
+  reasons.forEach((r, i) => {
+    const c = document.createElement('div');
+    c.className = 'cloud';
+    c.textContent = '☁️';
+    c.onclick = () => {
+      if (c.classList.contains('revealed')) return;
+      c.classList.add('revealed');
+      c.textContent = r;
+      const cnt = document.getElementById('cloudCount');
+      cnt.textContent = Number(cnt.textContent) + 1;
+    };
+    cloudsBox.appendChild(c);
+  });
+}
+
+// ===== МЕДАЛЬ =====
+function showMedal() {
+  const box = document.getElementById('medalBox');
+  if (box.innerHTML) return;
+  box.innerHTML = '<div class="medal">Лучшей маме на свете</div>';
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.textContent = ['❤','🌸','💗','✨'][Math.floor(Math.random()*4)];
+      c.style.left = Math.random() * 100 + '%';
+      c.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }, i * 60);
+  }
+}
+
+// ===== ОБЕЩАНИЕ =====
+function showPromise() {
+  const box = document.getElementById('promiseBox');
+  box.innerHTML = '<div class="signature">твои дочка и сын</div>';
+}
+
+// ===== СЧЁТЧИК ДНЕЙ =====
+let counterStarted = false;
+function startCounter() {
+  if (counterStarted) return;
+  counterStarted = true;
+  const el = document.getElementById('daysCounter');
+  if (!el) return;
+  const start = new Date(2010, 4, 8);
+  const now = new Date();
+  const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  let n = 0;
+  const step = Math.max(1, Math.floor(days / 60));
+  const interval = setInterval(() => {
+    n += step;
+    if (n >= days) { n = days; clearInterval(interval); }
+    el.textContent = n.toLocaleString('ru-RU');
+  }, 30);
+}
+
+// ===== ПЕЧАТЬ ПИСЬМА =====
+function sealLetter() {
+  const box = document.getElementById('sealBox');
+  if (box.innerHTML) return;
+  box.innerHTML = '<div class="seal">запечатано навсегда</div><p class="subtitle" style="margin-top:14px;">до лучших времён. и навсегда.</p>';
+}
+
+// ===== ОБНЯТЬ МАМУ =====
+function hugMom() {
+  for (let i = 0; i < 40; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.textContent = ['❤','🌸','💗','✨','🎈','🤗'][Math.floor(Math.random()*6)];
+      c.style.left = Math.random() * 100 + '%';
+      c.style.fontSize = (18 + Math.random() * 16) + 'px';
+      c.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }, i * 40);
+  }
+  const box = document.createElement('div');
+  box.className = 'popup';
+  box.style.position = 'fixed';
+  box.style.left = '50%';
+  box.style.top = '50%';
+  box.style.transform = 'translate(-50%,-50%)';
+  box.style.zIndex = '200';
+  box.style.maxWidth = '320px';
+  box.style.textAlign = 'center';
+  box.style.background = 'rgba(255,255,255,.95)';
+  box.innerHTML = '<b>ты — самая лучшая.</b><br>мы тебя любим.';
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 4000);
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+}
+
+// ===== ЛАЙК =====
+let liked = false;
+function toggleLike() {
+  const h = document.getElementById('likeHeart');
+  const c = document.getElementById('likeCount');
+  liked = !liked;
+  if (liked) {
+    h.textContent = '❤';
+    h.classList.add('liked');
+    c.textContent = 'спасибо. мы передадим маме.';
+  } else {
+    h.textContent = '🤍';
+    h.classList.remove('liked');
+    c.textContent = 'нажми, если письмо тебе понравилось';
+  }
+}
+
+// ===== СВАЙПЫ ДЛЯ КАРУСЕЛИ =====
+document.addEventListener('touchstart', e => {
+  if (!e.target.closest('.carousel')) return;
+  window._touchX = e.touches[0].clientX;
+});
+document.addEventListener('touchend', e => {
+  if (window._touchX == null) return;
+  const dx = e.changedTouches[0].clientX - window._touchX;
+  if (Math.abs(dx) > 40) { if (dx < 0) carNext(); else carPrev(); }
+  window._touchX = null;
+});
+
+// ===== ПРЕДЗАГРУЗКА =====
+showPage(0);
+</script>
+</body>
+</html>
